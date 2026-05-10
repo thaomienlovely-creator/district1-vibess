@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>district1.vibes | Trái tim Sài Gòn</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Inter:wght@300;400;600&family=Space+Mono&display=swap" rel="stylesheet">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <style>
+        :root {
+            --bg: #f9f7f2;
+            --text: #2d2a26;
+            --accent: #5e6d5a; /* Xanh rêu dịu */
+            --line: rgba(45, 42, 38, 0.15);
+            --paper: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--bg); 
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Trang trí họa tiết đường kẻ báo */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 50px; bottom: 0;
+            width: 1px; background: var(--line);
+            z-index: -1;
+        }
+
+        h1, h2, h3 { font-family: 'Playfair Display', serif; font-weight: 700; }
+
+        /* --- MÀN HÌNH CHÀO (HERO) --- */
+        #hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            border-bottom: 1px solid var(--text);
+            position: relative;
+        }
+
+        /* --- PHẦN THÀNH VIÊN --- */
+        .hero-members {
+            position: absolute;
+            left: 70px;
+            bottom: 60px;
+            text-align: left;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.65rem;
+            line-height: 1.8;
+            letter-spacing: 1px;
+            border-left: 1px solid var(--text);
+            padding-left: 15px;
+            text-transform: uppercase;
+            opacity: 0.8;
+        }
+        .hero-members b { font-weight: 600; color: var(--accent); }
+
+        .hero-tag { font-family: 'Space Mono', monospace; font-size: 0.8rem; letter-spacing: 3px; margin-bottom: 1rem; }
+        .hero-title { font-size: clamp(3rem, 10vw, 6rem); margin-bottom: 2rem; line-height: 1; }
+        
+        .btn-explore {
+            padding: 15px 40px;
+            border: 1px solid var(--text);
+            background: transparent;
+            font-family: 'Space Mono', monospace;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            z-index: 2;
+        }
+        .btn-explore:hover { background: var(--text); color: var(--bg); }
+
+        /* --- MAIN CONTENT --- */
+        #main-content { display: none; padding: 60px 10% 60px 100px; max-width: 1300px; margin: 0 auto; }
+
+        .journal-meta { display: flex; justify-content: space-between; border-bottom: 1px solid var(--text); padding-bottom: 10px; margin-bottom: 40px; font-family: 'Space Mono', monospace; font-size: 0.7rem; }
+
+        /* Tabs Menu */
+        .nav-tabs { display: flex; gap: 30px; margin-bottom: 50px; border-bottom: 1px solid var(--line); padding-bottom: 15px; overflow-x: auto; }
+        .tab-item { cursor: pointer; opacity: 0.5; font-weight: 600; text-transform: uppercase; font-size: 0.8rem; white-space: nowrap; transition: 0.3s; }
+        .tab-item.active { opacity: 1; border-bottom: 2px solid var(--text); }
+
+        .section-content { display: none; animation: fadeIn 0.8s ease forwards; }
+        .section-content.active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Editorial Layout */
+        .grid-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
+        .column-text { text-align: justify; column-count: 1; }
+        .info-card { background: var(--paper); padding: 30px; border: 1px solid var(--line); box-shadow: 10px 10px 0px var(--accent); margin-bottom: 30px; }
+
+        /* --- ĐỊA DANH --- */
+        .place-item { margin-bottom: 100px; }
+        .place-header { font-size: 2.5rem; margin-bottom: 20px; border-left: 5px solid var(--accent); padding-left: 20px; }
+        
+        .gallery { display: grid; grid-template-columns: 2fr 1fr; gap: 15px; margin: 30px 0; }
+        .gallery figure { margin: 0; }
+        .gallery img { width: 100%; height: 350px; object-fit: cover; filter: sepia(10%); transition: 0.5s; cursor: crosshair; border: 1px solid var(--line); }
+        .gallery img:hover { filter: sepia(0%); }
+        .gallery figcaption { font-family: 'Space Mono', monospace; font-size: 0.6rem; margin-top: 8px; text-transform: uppercase; opacity: 0.7; }
+
+        /* Hàng ảnh phụ */
+        .sub-gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 15px; }
+        .sub-gallery img { height: 180px; }
+
+        .place-info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; }
+
+        /* --- QR CODE BOX --- */
+        .qr-container { 
+            position: fixed; bottom: 30px; right: 30px; 
+            background: var(--paper); padding: 15px; 
+            border: 1px solid var(--text); text-align: center;
+            box-shadow: 5px 5px 0px var(--text);
+            z-index: 100;
+        }
+        #qrcode img { margin: 0 auto; }
+        .qr-text { font-family: 'Space Mono', monospace; font-size: 0.6rem; margin-top: 5px; }
+
+        footer { text-align: center; padding: 100px 0; border-top: 1px solid var(--line); font-family: 'Space Mono'; opacity: 0.5; }
+
+        @media (max-width: 900px) {
+            .grid-layout, .place-info-grid, .gallery, .sub-gallery { grid-template-columns: 1fr; }
+            #main-content { padding-left: 60px; }
+            .qr-container { display: none; }
+            .hero-members { left: 60px; bottom: 30px; font-size: 0.55rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <section id="hero">
+        <div class="hero-members">
+            <p><b>Thảo Miên:</b> Nội dung, thiết kế</p>
+            <p><b>Xuân An:</b> Nội dung</p>
+            <p><b>Thiên Nhi:</b> Thuyết trình</p>
+            <p><b>Quốc Minh:</b> Thuyết trình</p>
+            <p><b>Minh Hiển:</b> Hình ảnh</p>
+            <p><b>Khánh Vân:</b> Hình ảnh</p>
+        </div>
+
+        <div class="hero-tag">EST. 1976 / TP. HỒ CHÍ MINH</div>
+        <h1 class="hero-title">district1.<br><i>vibes</i></h1>
+        <p style="margin-bottom: 2rem; font-style: italic;">Hành trình vào trái tim của "Hòn ngọc Viễn Đông"</p>
+        <button class="btn-explore" onclick="showContent()">TÌM HIỂU THÊM</button>
+    </section>
+
+    <main id="main-content">
+        <div class="journal-meta">
+            <span>VOLUME 01</span>
+            <span>QUẬN 1, SAIGON, VN</span>
+            <span id="current-date">MAY 2026</span>
+        </div>
+
+        <nav class="nav-tabs">
+            <div class="tab-item active" onclick="openTab(event, 'tongquan')">Tổng quan</div>
+            <div class="tab-item" onclick="openTab(event, 'vitri')">Vị trí & Địa lý</div>
+            <div class="tab-item" onclick="openTab(event, 'kinhte')">Vị thế & Kinh tế</div>
+            <div class="tab-item" onclick="openTab(event, 'diadanh')">Địa danh nổi bật</div>
+        </nav>
+
+        <div id="tongquan" class="section-content active">
+            <div class="grid-layout">
+                <div class="column-text">
+                    <h2 style="margin-bottom: 20px;">Trái tim của Thành phố</h2>
+                    <p>Quận 1 là sự giao thoa độc đáo giữa di sản lịch sử lâu đời và nhịp sống đô thị hiện đại. Với bề dày phát triển qua hơn 300 năm, nơi đây không chỉ là đầu não hành chính mà còn là linh hồn của Sài Gòn.</p>
+                    <br>
+                    <p><b>Dân cư:</b> Quy mô hơn 200.000 người (2022). Mật độ cực cao (~29.246 người/km²), hội tụ tầng lớp tri thức và mức sống dẫn đầu cả nước.</p>
+                </div>
+                <div class="info-card">
+                    <h3>Sự hình thành</h3>
+                    <p style="font-size: 0.9rem; margin-top: 10px;">Chính thức thành lập năm 1976 từ việc sáp nhập Quận 1 và Quận 2 cũ. Đây là nơi khởi nguồn của những quy hoạch đô thị kiểu Pháp đầu tiên tại Việt Nam.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="vitri" class="section-content">
+            <div class="grid-layout">
+                <div class="info-card">
+                    <h3>Vị trí tiếp giáp</h3>
+                    <ul style="list-style: none; margin-top: 15px; font-size: 0.9rem;">
+                        <li>• <b>Đông:</b> TP. Thủ Đức (qua sông Sài Gòn)</li>
+                        <li>• <b>Tây:</b> Quận 3 và Quận 5</li>
+                        <li>• <b>Nam:</b> Quận 4 (qua kênh Bến Nghé)</li>
+                    </ul>
+                </div>
+                <div class="column-text">
+                    <h3>Đặc điểm địa hình</h3>
+                    <p>Địa hình cao ráo, bằng phẳng với nền đất cứng, cực kỳ thuận lợi cho việc xây dựng các tòa nhà chọc trời. Hệ thống sông rạch bao quanh (Sông Sài Gòn, rạch Bến Nghé, kênh Nhiêu Lộc) tạo nên một cấu trúc đô thị ven sông đặc sắc.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="kinhte" class="section-content">
+            <div class="info-card" style="box-shadow: 10px 10px 0px var(--text);">
+                <h2>Vai trò kinh tế chiến lược</h2>
+                <p style="margin-top: 15px;">Đóng góp GRDP khổng lồ (~14,5 tỷ USD). Quận 1 là trung tâm điều phối dòng vốn toàn quốc, nơi đặt trụ sở của các ngân hàng quốc tế, tập đoàn đa quốc gia và các khách sạn 5 sao sang trọng bậc nhất.</p>
+            </div>
+            <div class="grid-layout" style="margin-top: 30px;">
+                <div class="column-text">
+                    <h4>Ẩm thực</h4>
+                    <p>Sự hòa quyện tinh tế giữa hương vị truyền thống ba miền và ẩm thực quốc tế. Từ chợ Bến Thành sầm uất đến những nhà hàng Fine Dining đẳng cấp.</p>
+                </div>
+                <div class="column-text">
+                    <h4>Kinh tế đêm</h4>
+                    <p>Phát triển mạnh mẽ với các phố đi bộ, dịch vụ giải trí xuyên đêm, tạo nên một "thành phố không ngủ".</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="diadanh" class="section-content">
+            
+            <div class="place-item">
+                <h2 class="place-header">01. Công Viên Tao Đàn</h2>
+                <div class="gallery">
+                    <img src="https://images.unsplash.com/photo-1596422045429-90e7e0047593?q=80&w=1000" alt="Tao Dan">
+                    <img src="https://images.unsplash.com/photo-1582650809083-094191024357?q=80&w=500" alt="Tao Dan Close up">
+                </div>
+                <div class="place-info-grid column-text">
+                    <div>
+                        <p><b>Vị trí & Hình thành:</b> Rộng 10 hecta giữa trung tâm, bao quanh bởi 4 trục đường chính. Xưa là vườn của Dinh Toàn quyền Pháp, mang tên Tao Đàn từ sau 1955.</p>
+                        <br>
+                        <p><b>Lý do thu hút:</b> Hơn 1.000 cây cổ thụ hàng trăm năm tuổi, là "lá phổi xanh" yên bình giữa lòng thành phố. Nơi đây nổi tiếng với văn hóa thưởng trà và nghe chim hót.</p>
+                    </div>
+                    <div>
+                        <p><b>Vai trò:</b> Không gian sinh hoạt cộng đồng và điều hòa không khí thiết yếu. Nơi đây còn là điểm hẹn văn hóa với Đền tưởng niệm Vua Hùng và Hội Hoa Xuân hàng năm.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="place-item">
+                <h2 class="place-header">02. Bảo tàng TP. Hồ Chí Minh</h2>
+                <div class="gallery">
+                    <img src="https://images.unsplash.com/photo-1544033527-b192daee1f5b?q=80&w=1000" alt="Museum">
+                    <img src="https://images.unsplash.com/photo-1559592490-683c0027324d?q=80&w=500" alt="Museum Arch">
+                </div>
+                <div class="place-info-grid column-text">
+                    <div>
+                        <p><b>Vị trí & Hình thành:</b> Số 65 Lý Tự Trọng. Hoàn thành năm 1890 bởi KTS Alfred Foulhoux, từng là Dinh Gia Long trước khi trở thành bảo tàng năm 1978.</p>
+                        <br>
+                        <p><b>Lý do thu hút:</b> Kiến trúc Gothique cổ điển giao thoa Á Đông. Những hành lang dài và cầu thang gỗ cổ kính là bối cảnh điện ảnh lý tưởng cho du khách.</p>
+                    </div>
+                    <div>
+                        <p><b>Vai trò:</b> Bảo tồn di sản và nghiên cứu lịch sử. Nơi đây đóng vai trò là "cuốn từ điển sống" về sự phát triển của Sài Gòn xưa và nay.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="place-item">
+                <h2 class="place-header">03. Dinh Độc Lập</h2>
+                <div class="gallery">
+                    <figure>
+                        <img src="z7810263827233_42e3dc117f0215d2b196c0d6655dd925.jpg" alt="Toàn cảnh Dinh">
+                        <figcaption>Góc nhìn chính diện từ thảm cỏ xanh</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="z7810263829103_29c13a31e190b14c1c34dd9b289f7abe.jpg" alt="Chi tiết kiến trúc">
+                        <figcaption>Hệ thống rèm hoa đá độc đáo</figcaption>
+                    </figure>
+                </div>
+                
+                <div class="sub-gallery">
+                    <figure>
+                        <img src="z7810263831513_7ef627fa14c226d1f3933e2c9a2bf9dc.jpg" alt="Nội thất">
+                        <figcaption>Phòng khánh tiết sang trọng</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="z7810263841983_8d11a05762da8d45a3d871f9f165f346.jpg" alt="Lối hành lang">
+                        <figcaption>Hành lang ngập tràn ánh sáng</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="z7810263902623_5c6628c3f21c5b6dabc364fcfae3f565.jpg" alt="Di tích">
+                        <figcaption>Khu vực trưng bày lịch sử</figcaption>
+                    </figure>
+                </div>
+
+                <div class="place-info-grid column-text" style="margin-top: 30px;">
+                    <div>
+                        <p><b>Vị trí & Hình thành:</b> Số 135 Nam Kỳ Khởi Nghĩa. Do KTS Ngô Viết Thụ thiết kế, khánh thành năm 1966. Chứng nhân vĩ đại cho ngày 30/4/1975.</p>
+                        <br>
+                        <p><b>Lý do thu hút:</b> Kiến trúc hiện đại lồng ghép triết lý phong thủy phương Đông (chữ Cát, Khẩu, Vương). Hệ thống hầm ngầm quân sự đầy bí ẩn.</p>
+                    </div>
+                    <div>
+                        <p><b>Vai trò:</b> Di tích
