@@ -108,15 +108,11 @@
         .place-item { margin-bottom: 100px; }
         .place-header { font-size: 2.5rem; margin-bottom: 20px; border-left: 5px solid var(--accent); padding-left: 20px; }
         
-        .gallery { display: grid; grid-template-columns: 2fr 1fr; gap: 15px; margin: 30px 0; }
-        .gallery figure { margin: 0; }
-        .gallery img { width: 100%; height: 350px; object-fit: cover; filter: sepia(10%); transition: 0.5s; cursor: crosshair; border: 1px solid var(--line); }
+        .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin: 30px 0; }
+        .gallery-item { position: relative; }
+        .gallery img { width: 100%; height: 350px; object-fit: cover; filter: sepia(15%); transition: 0.5s; cursor: crosshair; border: 1px solid var(--line); }
         .gallery img:hover { filter: sepia(0%); }
-        .gallery figcaption { font-family: 'Space Mono', monospace; font-size: 0.6rem; margin-top: 8px; text-transform: uppercase; opacity: 0.7; }
-
-        /* Hàng ảnh phụ */
-        .sub-gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 15px; }
-        .sub-gallery img { height: 180px; }
+        .caption { font-family: 'Space Mono', monospace; font-size: 0.6rem; margin-top: 8px; text-transform: uppercase; opacity: 0.7; border-top: 1px solid var(--line); padding-top: 5px; }
 
         .place-info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; }
 
@@ -134,7 +130,7 @@
         footer { text-align: center; padding: 100px 0; border-top: 1px solid var(--line); font-family: 'Space Mono'; opacity: 0.5; }
 
         @media (max-width: 900px) {
-            .grid-layout, .place-info-grid, .gallery, .sub-gallery { grid-template-columns: 1fr; }
+            .grid-layout, .place-info-grid, .gallery { grid-template-columns: 1fr; }
             #main-content { padding-left: 60px; }
             .qr-container { display: none; }
             .hero-members { left: 60px; bottom: 30px; font-size: 0.55rem; }
@@ -227,8 +223,14 @@
             <div class="place-item">
                 <h2 class="place-header">01. Công Viên Tao Đàn</h2>
                 <div class="gallery">
-                    <img src="https://images.unsplash.com/photo-1596422045429-90e7e0047593?q=80&w=1000" alt="Tao Dan">
-                    <img src="https://images.unsplash.com/photo-1582650809083-094191024357?q=80&w=500" alt="Tao Dan Close up">
+                    <div class="gallery-item">
+                        <img src="https://images.unsplash.com/photo-1596422045429-90e7e0047593?q=80&w=1000" alt="Tao Dan">
+                        <p class="caption">Lá phổi xanh trung tâm</p>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://images.unsplash.com/photo-1582650809083-094191024357?q=80&w=500" alt="Tao Dan Close up">
+                        <p class="caption">Góc tĩnh lặng giữa phố thị</p>
+                    </div>
                 </div>
                 <div class="place-info-grid column-text">
                     <div>
@@ -245,8 +247,14 @@
             <div class="place-item">
                 <h2 class="place-header">02. Bảo tàng TP. Hồ Chí Minh</h2>
                 <div class="gallery">
-                    <img src="https://images.unsplash.com/photo-1544033527-b192daee1f5b?q=80&w=1000" alt="Museum">
-                    <img src="https://images.unsplash.com/photo-1559592490-683c0027324d?q=80&w=500" alt="Museum Arch">
+                    <div class="gallery-item">
+                        <img src="https://images.unsplash.com/photo-1544033527-b192daee1f5b?q=80&w=1000" alt="Museum">
+                        <p class="caption">Kiến trúc Gothique Pháp</p>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://images.unsplash.com/photo-1559592490-683c0027324d?q=80&w=500" alt="Museum Arch">
+                        <p class="caption">Chi tiết điêu khắc cổ điển</p>
+                    </div>
                 </div>
                 <div class="place-info-grid column-text">
                     <div>
@@ -262,37 +270,83 @@
 
             <div class="place-item">
                 <h2 class="place-header">03. Dinh Độc Lập</h2>
-                <div class="gallery">
-                    <figure>
-                        <img src="z7810263827233_42e3dc117f0215d2b196c0d6655dd925.jpg" alt="Toàn cảnh Dinh">
-                        <figcaption>Góc nhìn chính diện từ thảm cỏ xanh</figcaption>
-                    </figure>
-                    <figure>
-                        <img src="z7810263829103_29c13a31e190b14c1c34dd9b289f7abe.jpg" alt="Chi tiết kiến trúc">
-                        <figcaption>Hệ thống rèm hoa đá độc đáo</figcaption>
-                    </figure>
-                </div>
                 
-                <div class="sub-gallery">
-                    <figure>
-                        <img src="z7810263831513_7ef627fa14c226d1f3933e2c9a2bf9dc.jpg" alt="Nội thất">
-                        <figcaption>Phòng khánh tiết sang trọng</figcaption>
-                    </figure>
-                    <figure>
-                        <img src="z7810263841983_8d11a05762da8d45a3d871f9f165f346.jpg" alt="Lối hành lang">
-                        <figcaption>Hành lang ngập tràn ánh sáng</figcaption>
-                    </figure>
-                    <figure>
-                        <img src="z7810263902623_5c6628c3f21c5b6dabc364fcfae3f565.jpg" alt="Di tích">
-                        <figcaption>Khu vực trưng bày lịch sử</figcaption>
-                    </figure>
+                <div class="gallery">
+                    <div class="gallery-item">
+                        <img src="z7810263827233_42e3dc117f0215d2b196c0d6655dd925.jpg" alt="Dinh Độc Lập Front">
+                        <p class="caption">Mặt tiền kiến trúc Ngô Viết Thụ</p>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="z7810263841983_8d11a05762da8d45a3d871f9f165f346.jpg" alt="Dinh Độc Lập Side">
+                        <p class="caption">Toàn cảnh khuôn viên xanh</p>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="z7810263852767_f402adfa186f19461a57d7ee3cf67fe7.jpg" alt="Inside Palace">
+                        <p class="caption">Không gian nội thất trang trọng</p>
+                    </div>
                 </div>
 
-                <div class="place-info-grid column-text" style="margin-top: 30px;">
+                <div class="place-info-grid column-text">
                     <div>
                         <p><b>Vị trí & Hình thành:</b> Số 135 Nam Kỳ Khởi Nghĩa. Do KTS Ngô Viết Thụ thiết kế, khánh thành năm 1966. Chứng nhân vĩ đại cho ngày 30/4/1975.</p>
                         <br>
                         <p><b>Lý do thu hút:</b> Kiến trúc hiện đại lồng ghép triết lý phong thủy phương Đông (chữ Cát, Khẩu, Vương). Hệ thống hầm ngầm quân sự đầy bí ẩn.</p>
                     </div>
                     <div>
-                        <p><b>Vai trò:</b> Di tích
+                        <p><b>Vai trò:</b> Di tích quốc gia đặc biệt, giữ trọng trách giáo dục truyền thống và phục vụ các nghi lễ đối ngoại quan trọng của Nhà nước.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <footer>
+            <p>DISTRICT1.VIBES / 2026 JOURNAL</p>
+            <p style="font-size: 0.6rem; margin-top: 10px;">MADE WITH HEART FOR SAIGON LOVERS</p>
+        </footer>
+    </main>
+
+    <div class="qr-container">
+        <div id="qrcode"></div>
+        <p class="qr-text">QUÉT ĐỂ TRUY CẬP TRANG WEB</p>
+    </div>
+
+    <script>
+        function showContent() {
+            document.getElementById('hero').style.display = 'none';
+            document.getElementById('main-content').style.display = 'block';
+            window.scrollTo(0,0);
+        }
+
+        function openTab(evt, tabName) {
+            var i, section, tabs;
+            section = document.getElementsByClassName("section-content");
+            for (i = 0; i < section.length; i++) {
+                section[i].classList.remove("active");
+            }
+            tabs = document.getElementsByClassName("tab-item");
+            for (i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove("active");
+            }
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+
+        window.onload = function() {
+            var currentUrl = window.location.href;
+            new QRCode(document.getElementById("qrcode"), {
+                text: currentUrl,
+                width: 80,
+                height: 80,
+                colorDark : "#2d2a26",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.H
+            });
+            
+            const d = new Date();
+            const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+            document.getElementById('current-date').innerText = months[d.getMonth()] + " " + d.getFullYear();
+        }
+    </script>
+</body>
+</html>
